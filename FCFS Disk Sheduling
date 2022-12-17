@@ -1,0 +1,37 @@
+#include<stdio.h>
+#include<stdlib.h>
+void FCFS ( int arr[] , int n , int head )
+{
+    int seek_time = 0 ;
+    int cur_track , distance ;
+    for( int i = 0 ; i < n ; i++)
+    {
+        cur_track = arr[i] ; 
+        distance  = abs(cur_track - head) ;
+        seek_time += distance ;
+        head = cur_track ;
+    }
+    printf("Total seek time : %d\n",seek_time);
+    printf("Seek sequence is : ");
+    for( int i = 0 ; i < n ; i++)
+    {
+        printf("%d \t",arr[i] );
+    }
+}
+int main()
+{
+    int n ;
+    printf("Enter the number of reqested tracks :\n");
+    scanf("%d",&n);
+    printf("Enter the rquested tracks : \n");
+    int arr[n] ;
+    for( int i = 0 ; i < n ; i++)
+    {
+        scanf("%d",&arr[i]);
+    }
+    int head = 50 ;
+    FCFS ( arr , n ,head );
+     
+    return 0;
+    
+}
