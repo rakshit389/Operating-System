@@ -32,17 +32,7 @@ void SCAN ( int tracks[] , int n , int head , char direction[] , int left[] , in
                 right[j+1] = temp ;
             }
         }
-    }
-     for( int j = 0 ; j <  temp1 ; j++)
-        {
-             printf("* %d",left[j]);
-        }
-        printf("\n");
-        for( int j = 0 ; j <  temp2 ; j++)
-        {
-             printf("* %d",right[j]);
-        }
-    
+    }  
     
    int run = 2;
    int  k  = 0 ;
