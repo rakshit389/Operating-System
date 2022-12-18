@@ -1,4 +1,4 @@
-#include<stdio.h>
+  #include<stdio.h>
 #include<stdlib.h>
 #include<string.h>
 #define disk_size 200 
@@ -62,6 +62,8 @@ void SCAN ( int tracks[] , int n , int head , char direction[] , int left[] , in
             if( flag == 0)
             {
                 tracks[k] = 0 ;
+                seek_count +=  abs( cur_track-0);
+                head =  0 ;
                 k++ ;
             }
             flag = 1 ;
@@ -89,11 +91,14 @@ void SCAN ( int tracks[] , int n , int head , char direction[] , int left[] , in
             if( flag == 0)
             {
                 tracks[k] = disk_size-1 ;
+                seek_count += abs(disk_size-1-cur_track) ;
+                head = disk_size-1  ;
                 k++;
             }
             flag = 1 ;
             direction = "left";
         }
+        
     }
  
     printf("Total number of seek operations = %d\n",seek_count);
@@ -129,7 +134,7 @@ int main()
             temp2++;
         }
     }
-    char direction[] = "right";
+    char direction[] = "left";
     SCAN ( tracks , n , head , direction , left , right , temp1 , temp2 );
      
     return 0;
