@@ -86,7 +86,7 @@ void SCAN ( int tracks[] , int n , int head , char direction[] , int left[] , in
             head = cur_track ;
              
         }
-        printf("##%d",seek_count);
+ 
     }
  
     printf("Total number of seek operations = %d\n",seek_count);
