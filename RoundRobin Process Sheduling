@@ -1,0 +1,145 @@
+#include<stdio.h>
+#include<stdlib.h>
+#include<stdbool.h>
+#include<string.h>
+
+struct Process
+{
+    int pid , at  , ct , st , bt , wt , rt , tat ;
+    int remt  ;
+};
+
+int findmax ( int a ,int b )
+{
+    return a>b?a:b ;
+}
+
+int main()
+{
+    int n , tq ;
+    int sumrt = 0 , sumwt = 0 , sumtat = 0 ;
+    float avgrt = 0 , avgwt = 9 , avgtat = 0 ;
+    
+    int curtime = 0 , executed = 0 ;
+    int queue[100] , front = -1 , rear = -1 ;
+    bool vis[100] ;
+    memset( vis , false , 100*sizeof(bool) );
+    printf("Enter the number of process : ");
+    scanf("%d",&n);
+    struct Process p[n+1 ] ;
+    
+    for( int i = 0 ; i < n ; i++)
+    {
+        p[i].pid = i ;
+        printf("Enter the arrival time and burst tiem for process %d\n",i);
+        scanf("%d %d",&p[i].at , &p[i].bt);
+        p[i].remt = p[i].bt ;
+    }
+    printf("Enter the value of time quanta : ");
+    scanf("%d",&tq);
+    
+    // Sort the processes according to arrival time 
+    
+    for ( int i = 0 ; i < n-i ; i++)
+    {
+        for( int j = 0 ; j < n-1-i ; j++)
+        {
+            if(p[j].at > p[j+1].at )
+            {
+                struct Process temp = p[j] ;
+                p[j] = p[j+1];
+                p[j+1] = temp ;
+            }
+        }
+    }
+    
+    // Processing in queue of all the processes which come 
+   
+   front = rear = 0 ;
+   queue[rear] = 0 ;
+   vis[0] = true ;
+   
+   while( executed != n )
+   {
+       int index = queue[front];
+       front++;
+       if( p[index].remt == p[index].bt )
+       {
+           p[index].st = findmax( p[index].at , curtime ) ;
+           curtime = p[index].st ;
+       }
+       
+       if ( p[index].remt-tq > 0 )
+       {
+            p[index].remt -= tq ;
+            curtime += tq ;
+           
+       }
+       else
+       {
+           curtime += p[index].remt ;
+           p[index].remt = 0 ;
+           executed++;
+           
+           p[index].ct = curtime ;
+           p[index].rt = p[index].st - p[index].at ;
+           p[index].tat = p[index].ct - p[index].at ;
+           p[index].wt = p[index].tat - p[index].bt ;
+           
+           sumtat += p[index].tat ;
+           sumwt += p[index].wt ;
+           sumrt += p[index].rt ;
+       }
+       
+       // Inserting next incoming processes into the queue 
+       
+       for( int i = 1 ; i < n ; i++ )
+       {
+           if ( p[i].remt > 0 && p[i].at <= curtime && vis[i] == false )
+           {
+               rear++;
+               queue[rear] = i ;
+               vis[i] = true ;
+           }
+           
+       }
+       
+      // Checking the current process...Should it again comes in queue or not 
+      
+      if ( p[index].remt > 0 )
+      {
+          queue[++rear] = index ;
+      }
+      
+      // If queue has no processes then add one from the list 
+      if ( front > rear )
+      {
+          for( int i = 0 ; i < n ; i++)
+          {
+              if( p[i].remt > 0 )
+              {
+                  rear++;
+                  queue[rear] = i ;
+                  vis[i] = true ;
+                  break ;
+              }
+          }
+      }
+      
+   }
+   avgtat = sumtat/n ;
+   avgrt = sumtat/n ;
+   avgwt = sumwt/n ;
+   
+    printf("process\t\tat\tbt\tst\tct\trt\ttat\twt\n");
+    
+    for(int i = 0 ; i < n ; i++){
+        printf("%d\t\t%d\t%d\t%d\t%d\t%d\t%d\t%d\n",p[i].pid , p[i].at , p[i].bt , p[i].st , p[i].ct , p[i].rt , p[i].tat , p[i].wt);
+    }
+    
+    printf("Average Response Time =  %0.2f\n Average TurnAround Time = %0.2f\n  Average Waiting Time = %0.2f\n" , avgrt , avgtat , avgwt);
+
+    return 0;
+    
+}
+
